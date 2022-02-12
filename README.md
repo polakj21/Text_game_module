@@ -5,11 +5,11 @@ room(dir1,dir2,dir3,dir4)
 
 dir¤((úvodní text pohledu),(foword),(interact),(use_item))
 
-foword((výpis možností),((název_možnosti),(room),(dir),((kdy),(vjakém stavu #bool#)),(text)),(--||--)) #pokud jen jedna možnost, nepsat výpis možností - není li žádná možnost, napište jen text do výpis možností. musí však zaèínat na !
+foword((výpis možností),((název_možnosti),(room #str#),(dir),((kdy),(vjakém stavu #bool#)),(text)),(--||--)) #pokud jen jedna možnost, nepsat výpis možností - není li žádná možnost, napište jen text do výpis možností. musí však zaèínat na !, pokud pak je v tomto pøípadì pouze jeden string, unìlejte z toho tuple tím, že za nìj dáte > , <
 
-interact((výpis možností),((název_možnosti),(text po vybrání)),((kdy),(vjakém stavu #bool#)),(outome)),(--||--)) #pokud jen jedna možnost, nepsat výpis možností
+interact((výpis možností),((název_možnosti),(text po vybrání)),((kdy),(vjakém stavu #bool#)),(outome)),(--||--)) je li text vybrání pouze jeden string, udìlejte z nìj tuple tím, že ze nìj nepíšete > , <
 
-use_item(((název itemu),(text po použití),((kdy),(vjakém stavu #bool#)),(outcome),(item_lost)),(--||--))
+use_item(((název itemu),(text po použití),((kdy),(vjakém stavu #bool#)),(outcome),(item_lost#bool#)),(--||--))
 
 
 item_lost(bool)
@@ -17,3 +17,7 @@ item_lost(bool)
 outcome((item #bool#),(když item => název, zmìní splnìno => (kdy))
 
 kdy(1/2/3/4/ #pro každou místnost vlastní# /main1/main2/main3/main4 #pro všechny místnosti spoleèné# /always) #vše string
+
+
+
+run((všechny rooms), (názvy místností #string#)) #první název je zaèázeèní místnost
