@@ -54,54 +54,60 @@ class room:
             main4 = switch(main4)
     
     def foword(self,data):
+        print(data)
         for dat in data[:1]:
-            datx = dat[3][0]
-            if datx != "always":
-                if not dat[3][1]:
-                    if datx == "1" and not self.done1:
-                        pass
-                    elif datx == "2" and not self.done2:
-                        pass
-                    elif datx == "3" and not self.done3:
-                        pass
-                    elif datx == "4" and not self.done4:
-                        pass
-                    elif datx == "main1" and not main1:
-                        pass
-                    elif datx == "main2" and not main2:
-                        pass
-                    elif datx == "main3" and not main3:
-                        pass
-                    elif datx == "main4" and not main4:
-                        pass
+            try:
+                datx = dat[3][0]
+            except:
+                pass
+            else:
+                if datx != "always":
+                    if not dat[3][1]:
+                        if datx == "1" and not self.done1:
+                            pass
+                        elif datx == "2" and not self.done2:
+                            pass
+                        elif datx == "3" and not self.done3:
+                            pass
+                        elif datx == "4" and not self.done4:
+                            pass
+                        elif datx == "main1" and not main1:
+                            pass
+                        elif datx == "main2" and not main2:
+                            pass
+                        elif datx == "main3" and not main3:
+                            pass
+                        elif datx == "main4" and not main4:
+                            pass
+                        else:
+                            data.remove(dat)
                     else:
-                        data.remove(dat)
-                else:
-                    if datx == "1" and self.done1:
-                        pass
-                    elif datx == "2" and self.done2:
-                        pass
-                    elif datx == "3" and self.done3:
-                        pass
-                    elif datx == "4" and self.done4:
-                        pass
-                    elif datx == "main1" and main1:
-                        pass
-                    elif datx == "main2" and main2:
-                        pass
-                    elif datx == "main3" and main3:
-                        pass
-                    elif datx == "main4" and main4:
-                        pass
-                    else:
-                        data.remove(dat)
+                        if datx == "1" and self.done1:
+                            pass
+                        elif datx == "2" and self.done2:
+                            pass
+                        elif datx == "3" and self.done3:
+                            pass
+                        elif datx == "4" and self.done4:
+                            pass
+                        elif datx == "main1" and main1:
+                            pass
+                        elif datx == "main2" and main2:
+                            pass
+                        elif datx == "main3" and main3:
+                            pass
+                        elif datx == "main4" and main4:
+                            pass
+                        else:
+                            data.remove(dat)
         
-        if len(data) >1:
+        if len(data) > 2:
             global direction
             global curent_room
             choises = data[1][0]
             for option in data[2:]:
                 choises += ", " + option[0]
+            l = False
             while True:
                 comand = input(data[0], " (", choises, ") ")
                 for dat in data[1:]:
@@ -110,13 +116,22 @@ class room:
                             for line in dat[-1][:-1]:
                                 print(line)
                                 i = input()
-                        print(dat[-1][-1])
+                        print(dat[-1][-1],"\n")
                         direction = dat[2]
-                    curent_room = dat[1]
-                print("\n", comand.capitalize(), " is not valid input.")
+                        curent_room = dat[1]
+                        l = True
+                if l:
+                    break
+                else:
+                    print("\n", comand.capitalize(), " is not valid input.")
         else:
-            curent_room = data[1]
-            direction = data[2]
+            if len(data[1][-1]) >1:
+                for line in data[1][-1][:-1]:
+                    print(line)
+                    i = input()
+            print(data[1][-1][-1],"\n")
+            curent_room = data[1][1]
+            direction = data[1][2]
             
     
     def use(self,data):
@@ -278,19 +293,30 @@ class room:
                     direction = 1
                 if len(self.dir[direction-1][0]) >1:
                     for line in self.dir[direction-1][0][:-1]:
-                        print(line,end="")
+                        print(line, end="")
                         i = input()
                 print(self.dir[direction-1][0][-1], "\n")
             elif comand.capitalize() == "Foword" or comand.capitalize() == "F":
-                if self.dir[direction-1][1][0][0] == "!":
-                    if len(self.dir[direction-1][1][0]) >1:
-                        for line in self.dir[direction-1][1][0][:-1]:
-                            print(line, end = "")
-                            i = input()
-                    print(self.dir[direction-1][1][0][-1], "\n")
-                else:
+                try:
+                    if self.dir[direction-1][1][0][0] == "!":
+                        replace = ""
+                        for symbol_ind,symbol in enumerate(self.dir[direction-1][1][0]):
+                            if symbol_ind != 0:
+                                replace += symbol
+                        new_list = list(self.dir[direction-1][1])
+                        new_list[0] = replace
+                        if len(new_list[0]) >1:
+                            for line in new_list[:-1]:
+                                print(line, end = "")
+                                i = input()
+                        print(new_list[-1], "\n")
+                    else:
+                        self.foword(self.dir[direction-1][1])
+                        break
+                except:
                     self.foword(self.dir[direction-1][1])
                     break
+                    
             elif comand.capitalize() == "Ineract" or comand.capitalize() == "I":
                 self.interact(self.dir[direction-1][2])
             elif comand.capitalize() == "Use" or comand == "U":
