@@ -20,7 +20,7 @@ R1 = TeGaMo.room((("pohled1",),
                  
                  (("pohled4","?"),
                   (("!nikam nejdeš",)),
-                  (("vyber si"),(("párek"),("našel jsi párek!§",),("1", False),((True),(("párek"),("1"))))),
+                  (("vyber si"),(("text"),("interagoval jsi v pohledu 4",),("always", True),((False),((),("always")))),(("párek"),("našel jsi párek!§",),("1", False),((True),(("párek"),("1"))))),
                   ()
                   )
                  )

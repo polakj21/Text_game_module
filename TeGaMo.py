@@ -1,25 +1,53 @@
+import shelve
+
 direction = 3
-items = ["párek","¤"]
+items = []
 main1 = False
 main2 = False
 main3 = False
 main4 = False
 curent_room = None
+rooms_dic = {}
+
 end1 = False
 end2 = False
 end3 = False
 end4 = False
+Save = False
 
 def run(rooms,names):
-    global end1,end2,end3,end4,curent_room
-    rooms_dic = {}
-    for room_ind,room in enumerate(rooms):
-        rooms_dic[names[room_ind]] = room
-    curent_room = names[0]
+    global end1,end2,end3,end4,curent_room,rooms_dic,Save,main1,main2,main3,main4,items,direction
+    try:
+        shelf = shelve.open("TaGaMo")
+        direction = shelf["direction"]
+        items = shelf["items"]
+        main1 = shelf["main1"]
+        main2 = shelf["main2"]
+        main3 = shelf["main3"]
+        main4 = shelf["main4"]
+        curent_room = shelf["curent_room"]
+        rooms_dic = shelf["rooms_dic"]
+        shelf.close()
+    except:
+        for room_ind,room in enumerate(rooms):
+            rooms_dic[names[room_ind]] = room
+            curent_room = names[0]
     while True:
         rooms_dic[curent_room].main_loop()
         if end1 or end2 or end3 or end4:
             break
+        if Save:
+            Save = False
+            shelf = shelve.open("TaGaMo")
+            shelf["direction"] = direction
+            shelf["items"] = items
+            shelf["main1"] = main1
+            shelf["main2"] = main2
+            shelf["main3"] = main3
+            shelf["main4"] = main4
+            shelf["curent_room"] = curent_room
+            shelf["rooms_dic"] = rooms_dic
+            shelf.close()
     if end1:
         end1 = False
         return 1
@@ -308,11 +336,11 @@ class room:
                 print("...")
             
     def main_loop(self):
-        global direction
+        global direction,Save
         while True:
             if end1 or end2 or end3 or end4:
                 break
-            comand = input("What do you want to do? (Left, Right, Foword, Interact, Use, iNventory) ")
+            comand = input("What do you want to do? (Left, Right, Foword, Interact, Use, iNventory, Save, Exit) ")
             if comand.capitalize() == "Left" or comand.capitalize() == "L":
                 direction -=1
                 if direction == 0:
@@ -365,5 +393,11 @@ class room:
                     print(items[-1], "\n")
                 else:
                     print("nothing",end = "")
+            elif comand.capitalize() == "Save" or comand.capitalize() == "S":
+                Save = True
+                print("Your game was saved.\n")
+                break
+            elif comand.capitalize() == "Exit" or comand.capitalize() == "E":
+                exit()
             else:
                 print(comand.capitalize(), " is not valid input.")           
